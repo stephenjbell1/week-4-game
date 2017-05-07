@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Crystal Game</title>
+  
+  <style type="text/css">
+
+    .crystal-image {
+      width: 300px;
+      height: 300px;
+    }
+  </style>
+
+</head>
+<body>
+
+  <h1>Number to Guess: <span id="number-to-guess"></span></h1>
+  <h1>Wins: <span id="wins"></span></h1>
+  <h1>Losses: <span id="losses"></span></h1>
+  <h1><span id="winlose"></span></h1>
+  <div>
+    <h2>Current Score: <span id="score"></span></h2>
+  </div>
+
+
+  <div id="crystals">
+  </div>
+
+  
+  <script type="text/javascript" src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
+
+  <script type="text/javascript">
+$(document).ready(function() {
+
+  var targetNumber = Math.floor((Math.random() * 120) + 19);
+
+  $("#number-to-guess").text(targetNumber);
+
+  var counter = 0;
+  var newtarget;
+  var winCounter = 0;
+  var lossCounter = 0;
+  var numberOptions = [1,2,3,4,5,6,7,8,9,10,11,12]; // options for the 4 random crystal values
+
+
+var resetcrystals = function(){
+  for (var i = 0; i < 4; i++) {  
+    numberOptions[i] = Math.floor((Math.random() * 9) + 1);
+    imageCrystal.attr("data-crystalvalue", numberOptions[i]); // This only adjusts the last crystal's value... I cannot figure out how to adjust all.
+  }
+}
+
+var updatetarget = function(){
+  targetNumber = Math.floor((Math.random() * 120) + 19);
+  $("#number-to-guess").text(targetNumber);
+}
+var reset = function() 
+  {
+    counter = 0;
+    updatetarget();
+    resetcrystals();
+         
+}
+
+  for (var i = 0; i < 4; i++) {  // creates 4 variables to house the crystal images, and Will assign a random value to each image as an attribute
+    numberOptions[i] = Math.floor((Math.random() * 9) + 1);
+    var imageCrystal = $("<img>");
+    imageCrystal.addClass("crystal-image");
+    imageCrystal.attr("src", "http://www.scienceclarified.com/photos/crystal-3107.jpg");
+    imageCrystal.attr("data-crystalvalue", numberOptions[i]);
+    $("#crystals").append(imageCrystal);
+  }
+
+
+  $(".crystal-image").on("click", function() { // on click event to add crystal value to totals and check for wins/losses
+    
+    var crystalValue = ($(this).attr("data-crystalvalue")); //
+    crystalValue = parseInt(crystalValue);
+   
+    counter += crystalValue;
+    $("#score").text(counter);
+  
+
+    if (counter === targetNumber) {
+      
+      winCounter++;
+      $("#winlose").text("You Win!");
+      $("#wins").text(winCounter);
+
+      reset();
+    }
+
+    else if (counter >= targetNumber) {
+      
+      lossCounter++;
+      $("#winlose").text("You Lose.");
+      $("#losses").text(lossCounter);
+      reset();
+    }
+
+  });
+});
+  </script>
+</body>
+</html>
